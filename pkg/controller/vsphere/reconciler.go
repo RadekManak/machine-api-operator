@@ -828,7 +828,7 @@ func taskIsFinished(task *mo.Task) (bool, error) {
 	}
 }
 
-func setProviderStatus(taskRef string, condition machinev1.VSphereMachineProviderCondition, scope *machineScope, vm *virtualMachine) error {
+func setProviderStatus(taskRef string, condition machinev1.Condition, scope *machineScope, vm *virtualMachine) error {
 	klog.Infof("%s: Updating provider status", scope.machine.Name)
 
 	if vm != nil {

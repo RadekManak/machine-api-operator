@@ -110,7 +110,7 @@ func getVSphereConfig(c runtimeclient.Reader) (*vSphereConfig, error) {
 	return &vcfg, nil
 }
 
-func setVSphereMachineProviderConditions(condition machinev1.VSphereMachineProviderCondition, conditions []machinev1.VSphereMachineProviderCondition) []machinev1.VSphereMachineProviderCondition {
+func setVSphereMachineProviderConditions(condition machinev1.Condition, conditions []machinev1.Condition) []machinev1.Condition {
 	now := metav1.Now()
 
 	if existingCondition := findProviderCondition(conditions, condition.Type); existingCondition == nil {
@@ -124,7 +124,7 @@ func setVSphereMachineProviderConditions(condition machinev1.VSphereMachineProvi
 	return conditions
 }
 
-func findProviderCondition(conditions []machinev1.VSphereMachineProviderCondition, conditionType machinev1.ConditionType) *machinev1.VSphereMachineProviderCondition {
+func findProviderCondition(conditions []machinev1.Condition, conditionType machinev1.ConditionType) *machinev1.Condition {
 	for i := range conditions {
 		if conditions[i].Type == conditionType {
 			return &conditions[i]
@@ -133,7 +133,7 @@ func findProviderCondition(conditions []machinev1.VSphereMachineProviderConditio
 	return nil
 }
 
-func updateExistingCondition(newCondition, existingCondition *machinev1.VSphereMachineProviderCondition) {
+func updateExistingCondition(newCondition, existingCondition *machinev1.Condition) {
 	if !shouldUpdateCondition(newCondition, existingCondition) {
 		return
 	}
@@ -147,12 +147,12 @@ func updateExistingCondition(newCondition, existingCondition *machinev1.VSphereM
 	existingCondition.LastProbeTime = newCondition.LastProbeTime
 }
 
-func shouldUpdateCondition(newCondition, existingCondition *machinev1.VSphereMachineProviderCondition) bool {
+func shouldUpdateCondition(newCondition, existingCondition *machinev1.Condition) bool {
 	return newCondition.Reason != existingCondition.Reason || newCondition.Message != existingCondition.Message
 }
 
-func conditionSuccess() machinev1.VSphereMachineProviderCondition {
-	return machinev1.VSphereMachineProviderCondition{
+func conditionSuccess() machinev1.Condition {
+	return machinev1.Condition{
 		Type:    machinev1.MachineCreation,
 		Status:  corev1.ConditionTrue,
 		Reason:  machinev1.MachineCreationSucceededConditionReason,
@@ -160,8 +160,8 @@ func conditionSuccess() machinev1.VSphereMachineProviderCondition {
 	}
 }
 
-func conditionFailed() machinev1.VSphereMachineProviderCondition {
-	return machinev1.VSphereMachineProviderCondition{
+func conditionFailed() machinev1.Condition {
+	return machinev1.Condition{
 		Type:   machinev1.MachineCreation,
 		Status: corev1.ConditionFalse,
 		Reason: machinev1.MachineCreationSucceededConditionReason,
