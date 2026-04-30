@@ -21,8 +21,10 @@ type MachineSetStatusApplyConfiguration struct {
 	AvailableReplicas *int32 `json:"availableReplicas,omitempty"`
 	// observedGeneration reflects the generation of the most recently observed MachineSet.
 	ObservedGeneration *int64 `json:"observedGeneration,omitempty"`
-	// labelSelector is the serialized label selector in string form that matches the MachineSet's machines.
+	// labelSelector is a label selector, in string format, for Machines corresponding to the MachineSet.
 	// It is exposed via the scale subresource as status.selector.
+	// When omitted, the MachineSet controller has not yet reconciled spec.selector into status.labelSelector.
+	// When present, it must not be empty and must not exceed 4096 characters.
 	LabelSelector *string `json:"labelSelector,omitempty"`
 	// In the event that there is a terminal problem reconciling the
 	// replicas, both ErrorReason and ErrorMessage will be set. ErrorReason
